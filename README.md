@@ -7,36 +7,35 @@ within a somewhat small (less than 100,000 people) group. The fundamental concep
 security implementations found in famous Currencies may not be utilized (Implementation is more important than security
 for this project)
 
-## Status
+## Using this Project
 
-- A method of organizing Blocks, verifying their validity, and keeping a list of current balances has been developed. A
-  Mining (PoW) system has also been completed.
-- A networking toolkit for communicating with a Server (or p2p in the future) is currently being designed
-- An easily accessible GUI for Wallets and viewing the BlockChain is also in the works
+See Releases for a .jar files to host your own Node, run a Miner Client, or create/access a Wallet.
 
-## Current Coin Details
+## Current Coin Testnet Details
 
 Subject to change until release 1.0<br />
 ![Alt text](src/main/resources/IngwazCoin.png?raw=true "Logo")<br/>
 
-- 100 Coins as Miner's Reward, along with 1% of every Submitted Transaction
-- Network Difficulty Reset every 100 blocks (Methods to verify Target validity)
-- 100 Transactions per Block (excluding Mining Reward)
-- 1% Non-Negotiable Transaction Fee (Methods available to verify)
+- 100 Coins as Initial Miner's Reward, along with 1% of every Transaction within the Block
+- Halving every 100,000 blocks
+- 1 Centralized Node, with the ability for "Nodeship" to be transferred to other Computers easily
+- Variable Network Difficulty, with Target Difficulty altered every 100 blocks
+- 1000 Transactions per Block (excluding Mining Reward)
+- 1% Non-Negotiable Transaction Fee
 - TXID, consisting of Blocknumber and Millisecond time, signed and verified using ECDSA (BouncyCastle as Provider)
-- 1 Minute per Block (Estimated, may be subject to change)
+- 10 Minute per Block (Estimated, may be subject to change)
 - 64 Byte Nonce (144 Byte Block Header)
 
-### Contributors:
+Note, this coin can easily be self-hosted and the hoster can change most of the above parameters through a config file.
 
-- BlockChain and GUI: Shynn Lawrence
-- GUI: Gowtham Duggirala
+### Contribution
+
   <br />
-  More contributors always welcome! A BlockChain in Java, written and documented by students, should be entertaining in
-  the least!
-  For more information, Fork and issue a Pull Request or contact shynn.lawrence@gmail.com
+  More contributors always welcome. 
+  Please note: commits and Pull Requests that only reformat code without adding use-able functionality will be rejected.
+  For more information contact shynn.lawrence@gmail.com
   <br/>
-  -- Iŋgwaz Team
+  -- Shynn Lawrence
 
 ### License
 
