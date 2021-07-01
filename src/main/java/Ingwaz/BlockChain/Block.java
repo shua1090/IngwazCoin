@@ -8,7 +8,6 @@
 
 package Ingwaz.BlockChain;
 
-import Ingwaz.Mining.Foreman;
 import Ingwaz.Mining.Hash;
 import org.bouncycastle.util.encoders.Hex;
 
@@ -39,8 +38,8 @@ public class Block {
     // Contained in the Block:
     BigInteger target; // 32 Byte
 
-    int transactionAmount = 1000;
-    ArrayList<Transaction> transactions = new ArrayList<>(); // Max 1000 transactions per block
+    int transactionAmount = 1000; // Max amount of Transactions
+    ArrayList<Transaction> transactions = new ArrayList<>();
     MinerTransaction mt;
 
     public Block() {
@@ -218,28 +217,6 @@ public class Block {
         return merkleRoot(newHashes);
     }
 
-    public static void main(String[] args) {
-        Signature.InitializeProvider();
-        Wallet w = Wallet.createNewWallet("waste");
-        Block b = Block.randomBlock(0, "0".repeat(64), new BigInteger("0" + "F".repeat(63), 16));
-
-        BigDecimal bd = BigDecimal.ZERO;
-
-        for (int i = 0; i < 2_000_002; i++) {
-            b.blockNumber = i;
-            b.transactions.clear();
-            //        System.out.println(b.fullBlockAsString());
-            b.setMinerTransaction(b.calculateMT(w));
-            Foreman fore = new Foreman(b);
-            fore.startMining();
-            Block best = fore.waitOnBlock();
-            bd = bd.add(best.getMt().amount);
-            if (i % 100000 == 1) System.out.println("Miner's Fee Amount at block " + i + ": " + best.getMt().amount);
-        }
-        System.out.println("bd = " + bd);
-//        System.out.println(best.fullBlockAsString());
-    }
-
     /**
      * Verifies the current block's hash
      * is below the Target, returning true
@@ -368,7 +345,7 @@ public class Block {
         for (int i = 0; i < this.transactions.size(); i++) {
             TXFees = TXFees.add(this.transactions.get(i).getTransactionFees());
         }
-        TXFees = TXFees.add(BlockChain.minersReward.multiply(BigDecimal.ONE.divide(BigDecimal.valueOf(2).pow((int) (blockNumber / 100000)), 3, RoundingMode.FLOOR)));
+        TXFees = TXFees.add(BlockChain.minersReward.multiply(BigDecimal.ONE.divide(BigDecimal.valueOf(2).pow((int) (blockNumber / BlockChain.halvingBlockAmount)), 3, RoundingMode.FLOOR)));
 
         return new MinerTransaction(TXFees, address);
     }
@@ -490,7 +467,7 @@ public class Block {
         for (int i = 0; i < this.transactions.size(); i++) {
             TXFees = TXFees.add(this.transactions.get(i).getTransactionFees());
         }
-        TXFees = TXFees.add(BlockChain.minersReward.multiply(BigDecimal.ONE.divide(BigDecimal.valueOf(2).pow((int) (blockNumber / 100000)), 3, RoundingMode.FLOOR)));
+        TXFees = TXFees.add(BlockChain.minersReward.multiply(BigDecimal.ONE.divide(BigDecimal.valueOf(2).pow((int) (blockNumber / BlockChain.halvingBlockAmount)), 3, RoundingMode.FLOOR)));
         return TXFees;
     }
 

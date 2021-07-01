@@ -9,7 +9,6 @@
 package Ingwaz.BlockChain;
 
 import Ingwaz.Mining.Hash;
-import Ingwaz.Values;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -17,32 +16,19 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Comparator;
 
 
 public class BlockChain {
     public static int miningTime = 10; // ~ 10 minutes per Block
-    public static BigDecimal minersReward = new BigDecimal("100");
-    public static long halvingBlockAmount = 100_000; // Apply a halving every 100,000 blocks
+    public static BigDecimal minersReward = new BigDecimal("100"); // The Initial Miner's Reward
+    public static long halvingBlockAmount = 100_000; // The amount of blocks before a halving is applied
+    public static long targetResetBlockCount = 100; // Amount of blocks before each target reset
     String directoryName;
 
     public BlockChain(String dirName) {
         this.directoryName = dirName;
         syncData();
-    }
-
-    // Testing
-    public static void main(String[] args) {
-        BlockChain bc = new BlockChain("WasteBasket");
-        for (int i = 1; i < 10; i++) {
-            try {
-                System.out.println(i + "'s previous hash = " + Hash.hashToHex(bc.loadLatestBlock().getHash()));
-                bc.saveBlock(Block.randomBlock(i, Hash.hashToHex(bc.loadLatestBlock().getHash()), Values.target));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public void syncData() {
@@ -150,9 +136,9 @@ public class BlockChain {
         BigDecimal a = new BigDecimal(b.getTarget());
         BigInteger newTarget;
 
-        if ((b.getBlockNumber()) % 100 == 0) {
+        if ((b.getBlockNumber()) % targetResetBlockCount == 0) {
             // 600,000 = 10 minutes
-            newTarget = a.multiply(new BigDecimal(b.getTimeStamp() - findBlock(b.getBlockNumber() - 100).getTimeStamp()).divide(new BigDecimal(miningTime * 6_000_000), 5, RoundingMode.CEILING)).toBigInteger();
+            newTarget = a.multiply(new BigDecimal(b.getTimeStamp() - findBlock(b.getBlockNumber() - targetsAreValid()).getTimeStamp()).divide(new BigDecimal(miningTime * 6_000_000), 5, RoundingMode.CEILING)).toBigInteger();
         } else newTarget = b.getTarget();
         return newTarget;
     }
@@ -201,8 +187,8 @@ public class BlockChain {
         for (long a = 0; a <= blockNum; a++) {
             if (a == 0) {
                 target = new BigInteger("0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", 16);
-            } else if ((a) % 100 == 1 && a != 1) {
-                target = new BigDecimal(target).multiply(new BigDecimal(findBlock(a - 1).getTimeStamp() - findBlock(a - 101).getTimeStamp()).divide(new BigDecimal(miningTime * 10 * 60 * 1000), 5, RoundingMode.CEILING)).toBigInteger();
+            } else if ((a) % targetResetBlockCount == 1 && a != 1) {
+                target = new BigDecimal(target).multiply(new BigDecimal(findBlock(a - 1).getTimeStamp() - findBlock(a - (targetResetBlockCount + 1)).getTimeStamp()).divide(new BigDecimal(miningTime * 60 * 1000), 5, RoundingMode.CEILING)).toBigInteger();
             }
             if (!target.toString(16).equals(findBlock(a).getTarget().toString(16))) {
                 return a;
@@ -230,9 +216,22 @@ public class BlockChain {
                 val = val.add(t.getTransactionFees());
             }
             val = val.add(
-                    BlockChain.minersReward.multiply(BigDecimal.ONE.divide(BigDecimal.valueOf(2).pow((int) (a / 100000)), 3, RoundingMode.FLOOR))
+                    BlockChain.minersReward.multiply(BigDecimal.ONE.divide(BigDecimal.valueOf(2).pow((int) (a / halvingBlockAmount)), 3, RoundingMode.FLOOR))
             );
             if (!val.equals(temp.getMt().amount)) return a;
+        }
+        return -1;
+    }
+
+    private long validLinks() {
+        long blocknum = (loadLatestBlock() == null) ? -1 : loadLatestBlock().blockNumber;
+        for (; blocknum >= 0; blocknum--) {
+            if (blocknum == 0) {
+                return (findBlock(blocknum).getPreviousHash().equals("0".repeat(64))) ? -1 : 0;
+            } else {
+                if (!findBlock(blocknum).getPreviousHash().equals(Hash.hashToHex(findBlock(blocknum - 1).getHash())))
+                    return blocknum;
+            }
         }
         return -1;
     }
@@ -240,24 +239,19 @@ public class BlockChain {
     public long verifyChain() {
         long a = targetsAreValid();
         System.out.println("Valid Targets");
-        if (a != -1) {
+        if (a != -1)
             return a;
-        }
+
 
         a = hashBelowTarget();
         System.out.println("Hash Below Target");
         if (a != -1) return a;
         a = validMinersFees();
         System.out.println("Valid Miners Fee");
+        if (a != -1) return a;
+        a = validLinks();
+        System.out.println("Valid Links");
         return a;
-    }
-
-    public boolean verifyBlock(Block b, double miningTime, ArrayList<Transaction> list) {
-
-        if (!this.getTarget().equals(b.getTarget())) return false;
-        if (!b.verifyWork()) return false;
-        return list.equals(b.getTransactions());
-
     }
 
 }

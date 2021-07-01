@@ -41,23 +41,6 @@ public class Transaction {
         this.receiverAddr = receiverAddr;
     }
 
-    public static void main(String[] args) {
-        Signature.InitializeProvider();
-        Wallet w = Wallet.createNewWallet("");
-        Wallet f = Wallet.createNewWallet("");
-
-        Transaction t = new Transaction(KeyPackager.packagePubkey(w.getPubKey()), BigDecimal.ONE,
-                KeyPackager.packagePubkey(f.getPubKey()));
-        t.setTXID("Sign");
-        t.addSignature(
-                Base64.getEncoder().encodeToString(Signature.sign("Sign".getBytes(StandardCharsets.UTF_8), w.getPriKey()))
-        );
-        t.setExtraNonce(new byte[]{0, 0});
-        System.out.println(t.getHash());
-        Transaction l = Transaction.fromString(t.toString());
-        System.out.println(l.getHash());
-    }
-
     /**
      * Converts the String format of a Transaction into a useable Transaction
      *

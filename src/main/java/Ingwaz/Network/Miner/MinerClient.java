@@ -10,8 +10,6 @@ package Ingwaz.Network.Miner;
 
 import Ingwaz.BlockChain.*;
 import Ingwaz.Mining.Foreman;
-import Ingwaz.Network.Client.WalletClient;
-import Ingwaz.Network.Server.Listener;
 import Ingwaz.Network.Server.Node;
 
 import java.io.DataInputStream;
@@ -41,46 +39,46 @@ public class MinerClient {
         Node.mp.tm.destroy();
         Node.mp.tm = new BalanceManager(new File("WasteBasket/Balances"));
 
-        Node.currentBlock = new Block();
-        Node.currentBlock.setBlockNumber(0);
-        Node.currentBlock.setPreviousHash("0".repeat(64));
-        Node.currentBlock.setTimeStamp(System.currentTimeMillis());
-        Node.currentBlock.setTarget(Node.bc.getTarget());
-
-        Listener ls = new Listener();
-        new Thread(ls::listen).start();
-
-        Wallet w = Wallet.createNewWallet("Mining");
-        Wallet recieverWallet = Wallet.createNewWallet("recieverWallet");
-
-        MinerClient mc = new MinerClient("WasteBasket/Miner", w);
-
-        Node.bc.clear();
-        mc.bc.clear();
-
-        mc.serverAddresses.add("192.168.86.34");
-        mc.sync();
-        Thread t = new Thread(mc::startMining);
-        t.start();
-
-        WalletClient wc = new WalletClient(w, mc.serverAddresses.get(0));
-        WalletClient receiverWC = new WalletClient(recieverWallet, mc.serverAddresses.get(0));
-
-        long start = System.currentTimeMillis() + 21_000;
-        while (true) {
-            String balance = wc.parseCommand("Balance", null);
-            String balanceOfReceiver = receiverWC.parseCommand("Balance", null);
-
-            System.out.println("Miner/Sender: " + balance);
-            System.out.println("Receiver: " + balanceOfReceiver);
-
-            Thread.sleep(10_000);
-            if (System.currentTimeMillis() >= start) {
-                wc.parseCommand("Transaction", new String[]{KeyPackager.packagePubkey(recieverWallet), "100"});
-                System.out.println("Transaction submitted.");
-                start = Long.MAX_VALUE - 50;
-            }
-        }
+//        Node.currentBlock = new Block();
+//        Node.currentBlock.setBlockNumber(0);
+//        Node.currentBlock.setPreviousHash("0".repeat(64));
+//        Node.currentBlock.setTimeStamp(System.currentTimeMillis());
+//        Node.currentBlock.setTarget(Node.bc.getTarget());
+//
+//        Listener ls = new Listener();
+//        new Thread(ls::listen).start();
+//
+//        Wallet w = Wallet.createNewWallet("Mining");
+//        Wallet recieverWallet = Wallet.createNewWallet("recieverWallet");
+//
+//        MinerClient mc = new MinerClient("WasteBasket/Miner", w);
+//
+//        Node.bc.clear();
+//        mc.bc.clear();
+//
+//        mc.serverAddresses.add("192.168.86.34");
+//        mc.sync();
+//        Thread t = new Thread(mc::startMining);
+//        t.start();
+//
+//        WalletClient wc = new WalletClient(w, mc.serverAddresses.get(0));
+//        WalletClient receiverWC = new WalletClient(recieverWallet, mc.serverAddresses.get(0));
+//
+//        long start = System.currentTimeMillis() + 21_000;
+//        while (true) {
+//            String balance = wc.parseCommand("Balance", null);
+//            String balanceOfReceiver = receiverWC.parseCommand("Balance", null);
+//
+//            System.out.println("Miner/Sender: " + balance);
+//            System.out.println("Receiver: " + balanceOfReceiver);
+//
+//            Thread.sleep(10_000);
+//            if (System.currentTimeMillis() >= start) {
+//                wc.parseCommand("Transaction", new String[]{KeyPackager.packagePubkey(recieverWallet), "100"});
+//                System.out.println("Transaction submitted.");
+//                start = Long.MAX_VALUE - 50;
+//            }
+//        }
     }
 
 

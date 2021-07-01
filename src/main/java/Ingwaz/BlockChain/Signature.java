@@ -63,12 +63,8 @@ public class Signature {
             return ecdsaSign.verify(signature);
         } catch (NoSuchAlgorithmException | SignatureException | NoSuchProviderException | InvalidKeyException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error verifying the signature, see above ^");
+            return false;
         }
-    }
-
-
-    public static void main(String[] args) {
     }
 
 }

@@ -1,8 +1,6 @@
 package Ingwaz.Mining;
 
 import Ingwaz.BlockChain.Block;
-import Ingwaz.BlockChain.BlockChain;
-import Ingwaz.Values;
 
 import java.math.BigInteger;
 
@@ -18,27 +16,6 @@ public class Miner implements Runnable {
         this.startingValue = startingValue;
         this.actualStartingValue = startingValue;
         this.ascending = ascending;
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-        Block b = Block.randomBlock(1, Hash.hashToHex(new BlockChain("WasteBasket").loadLatestBlock().getHash()), Values.target);
-        b.setNonce(BigInteger.ZERO);
-        System.out.println("Initial Block: " + b.headerSpacedHex());
-        Thread.sleep(5000);
-        Thread t = new Thread(new Miner(b.copy(), BigInteger.ZERO, true));
-        Thread t2 = new Thread(new Miner(b.copy(), new BigInteger("FFFFFFFFFFFFFFFF", 16), false));
-        Thread t3 = new Thread(new Miner(b.copy(), new BigInteger("FFFFFFFFFFFFFFFF", 16), true));
-
-        long a = System.currentTimeMillis();
-        t.start();
-        t2.start();
-        t3.start();
-
-        t.join();
-        System.out.println("Time passed: " + (System.currentTimeMillis() - a));
-        System.out.println("Final Hash: " + Hash.hashToHex(SharedBlockFinder.getBlock().getHash()));
-        System.out.println("Final Nonce: " + SharedBlockFinder.getBlock().getNonce().toString(16));
-        System.out.println("Final Header: " + SharedBlockFinder.getBlock().headerSpacedHex());
     }
 
     public BigInteger getStartingValue() {

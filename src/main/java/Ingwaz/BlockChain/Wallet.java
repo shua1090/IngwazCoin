@@ -77,26 +77,6 @@ public class Wallet {
         return null;
     }
 
-    public static void main(String[] args) {
-        Signature.InitializeProvider();
-        Wallet w = Wallet.loadWalletInfo("WasteBasket/MyWallet");
-
-        Wallet f = Wallet.loadWalletInfo("WasteBasket/2ndWallet");
-
-        Transaction t = w.createTransaction(KeyPackager.packagePubkey(f.getPubKey()), BigDecimal.ONE);
-
-        t.setTXID("1-" + "1622846674559");
-        w.signTransaction(t);
-
-        System.out.println(t);
-        System.out.println(Signature.verifySignature(
-                Base64.getDecoder().decode(t.getSignature()),
-                t.getTXID().getBytes(StandardCharsets.UTF_8),
-                w.getPubKey()
-        ));
-        System.out.println("\n\n\n" + w.priKey);
-    }
-
     public String getWalletMemo() {
         return walletMemo;
     }

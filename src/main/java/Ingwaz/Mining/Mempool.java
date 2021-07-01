@@ -10,7 +10,6 @@ package Ingwaz.Mining;
 
 import Ingwaz.BlockChain.*;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
@@ -27,32 +26,6 @@ public class Mempool {
 
     public Mempool(BalanceManager tb) {
         tm = tb;
-    }
-
-    public static void main(String[] args) throws IOException {
-//        Signature.InitializeProvider();
-//        BalanceManager bm = new BalanceManager(new File("WasteBasket/Balances"));
-//        Mempool mp = new Mempool(bm);
-//        BlockChain bc = new BlockChain("WasteBasket");
-//
-//
-//        Wallet w = Wallet.loadWalletInfo("WasteBasket/Wallet");
-//
-//        bm.put(w, BigDecimal.TEN);
-//
-//        Wallet rand = Wallet.createNewWallet("Rand");
-//
-//        Transaction t = new Transaction(w, BigDecimal.TEN, rand);
-//        t.setTXID("1-" + System.currentTimeMillis());
-//        w.signTransaction(t);
-//
-//        mp.addTransaction(t);
-//
-////        var f = mp.buildBlock(w, 1);
-//        f.setPreviousHash(Hash.hashToHex(bc.loadLatestBlock().getHash()));
-//        System.out.println(f.fullBlockAsString());
-//
-//        bm.close();
     }
 
     public boolean verifySufficientFunds(Transaction t) {

@@ -9,10 +9,7 @@
 package Ingwaz.Mining;
 
 import Ingwaz.BlockChain.Block;
-import Ingwaz.BlockChain.BlockChain;
-import Ingwaz.BlockChain.Signature;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,54 +41,6 @@ public class Foreman {
 
         theMiners.add(new Thread(m1));
         theMiners.add(new Thread(m2));
-    }
-
-    public static void main(String[] args) throws IOException {
-        Signature.InitializeProvider();
-        BlockChain bc = new BlockChain("WasteBasket/BlockChain");
-        SharedBlockFinder.reset();
-
-        System.out.println(bc.verifyChain());
-//
-//        long longStart = System.currentTimeMillis();
-//
-//        Wallet w = Wallet.createNewWallet("WasteTest");
-//
-//        for (int i = 0; i < 251; i++) {
-//            Block temp = Block.randomBlock(
-//                    i,
-//                    (bc.loadLatestBlock() == null) ? "0".repeat(64) : Hash.hashToHex(bc.loadLatestBlock().getHash()),
-//                    bc.getTarget(0.01)
-//            );
-//
-//            temp.setMinerTransaction(temp.calculateMT(w));
-//
-//            Foreman f = new Foreman(temp.copy());
-//            long a = System.currentTimeMillis();
-//            f.startMining();
-//            Block b = f.waitOnBlock();
-//            long bTime = System.currentTimeMillis();
-//            System.out.println("Time pass: " + (bTime - a));
-//
-//            if (i % 5 == 0)
-//            System.out.println("Target of Block " + i + " is: " +
-//                    ("0".repeat(64 - temp.getTarget().toString(16).length())) +
-//                    temp.getTarget().toString(16));
-//
-//            if (i % 10 == 0 && i != 0){
-//                System.out.println("10 Block TimePass: " + (System.currentTimeMillis() - longStart));
-//                longStart = System.currentTimeMillis();
-//            }
-//
-//            try {
-//                bc.saveBlock(b);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            SharedBlockFinder.reset();
-//
-//        }
     }
 
     public void startMining() {
