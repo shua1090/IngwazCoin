@@ -7,6 +7,8 @@ within a somewhat small (less than 100,000 people) group. The fundamental concep
 security implementations found in famous Currencies may not be utilized (Implementation is more important than security
 for this project)
 
+For a high-level overview of this project, see our [website](https://shua1090.github.io/IngwazSite/)!
+
 ## Using this Project
 
 See Releases for a .jar files to host your own Node, run a Miner Client, or create/access a Wallet.
