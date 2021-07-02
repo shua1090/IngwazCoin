@@ -2,8 +2,7 @@
 
 ![Alt text](src/main/resources/IngwazSmall.png?raw=true "Logo")<br/>
 Ingwaz is an attempt to create a new, simple-to-understand cryptocurrency, implementing the basic concepts behind a
-BlockChain in Java. The cryptocurrency is not designed for large-scale use, and is more suitable for a 'reward' system
-within a somewhat small (less than 100,000 people) group. The fundamental concept of a BlockChain is used, but other
+BlockChain in Java. The fundamental concept of a BlockChain is used, but other
 security implementations found in famous Currencies may not be utilized (Implementation is more important than security
 for this project)
 
