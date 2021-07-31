@@ -1,5 +1,8 @@
 # Ingwaz Coin #
 
+
+Currently work in progress (Centralized Head-Node not ready in testnet, cli client/server not ready)
+
 ![Alt text](src/main/resources/IngwazSmall.png?raw=true "Logo")<br/>
 Ingwaz is an attempt to create a new, simple-to-understand cryptocurrency, implementing the basic concepts behind a
 BlockChain in Java. The fundamental concept of a BlockChain is used, but other
